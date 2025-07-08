@@ -1,0 +1,25 @@
+
+if [ "$#" -ne 2 ]; then
+    echo "用法: $0 <搜索文件> <搜索内容>"
+    exit 1
+fi
+
+search_file="$1"
+search_content="$2"
+output_file="search_results_$(date +%Y%m%d_%H%M%S).txt"
+
+# 检查文件是否存在
+if [ ! -f "$search_file" ]; then
+    echo "错误: 文件 '$search_file' 不存在"
+    exit 1
+fi
+
+# 执行搜索并保存结果
+echo "正在文件 '$search_file' 中搜索 '$search_content'..."
+echo "搜索结果(行号:内容):" | tee "$output_file"
+echo "----------------------------------" | tee -a "$output_file"
+
+grep -n "$search_content" "$search_file" | tee -a "$output_file"
+
+echo "----------------------------------" | tee -a "$output_file"
+echo "搜索结果已保存到: $output_file"
